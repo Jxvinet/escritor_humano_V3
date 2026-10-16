@@ -1,0 +1,27 @@
+# Local window position (machine-specific)
+ventana.ini
+
+# Generated shortcuts
+*.lnk
+
+# Build tools (downloaded by build.ps1)
+tools/
+
+# OS junk
+Thumbs.db
+Desktop.ini
+.DS_Store
+ehk*
+
+# Editor / IDE
+.vscode/
+.idea/
+*.swp
+*~
+
+# Temporary test artifacts
+eh-*.txt
+eh-*.log
+eh-*.html
+eh-*.ps1
+*.tmp
