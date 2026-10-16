@@ -22,7 +22,7 @@ if not defined AHK call :BuscarRegistro HKCU
 if not defined AHK (
     echo No se encontro AutoHotkey 2.0.
     echo Instalalo desde https://www.autohotkey.com/  elige la version 2.0
-    echo Mientras tanto puedes usar iniciar-powershell.bat
+    echo O usa dist\escritor_humano_V3\escritor_humano_V3.exe
     echo.
     pause
     exit /b 1
