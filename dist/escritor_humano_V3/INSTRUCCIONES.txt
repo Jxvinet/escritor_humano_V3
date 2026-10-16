@@ -1,0 +1,36 @@
+escritor_humano_V3
+====================
+
+LO MÁS FÁCIL
+------------
+Abre:
+  dist\escritor_humano_V3\escritor_humano_V3.exe
+
+O descomprime dist\escritor_humano_V3-windows.zip.
+
+
+CON AUTOHOTKEY
+--------------
+Doble clic en iniciar.bat (hace falta AutoHotkey 2.0).
+También se crea un acceso directo .lnk con el icono.
+
+
+USO
+---
+1. Edita el texto del cuadro (o texto.txt) y Guardar / Ctrl+S.
+2. Clic en el destino.
+3. F8 escribe. Escape cancela.
+4. Puedes cambiar de ventana: sigue en el cuadro de F8.
+
+Barras para ms, variación y tropiezos.
+Botón "Por defecto" = texto de ejemplo otra vez.
+
+
+ARCHIVOS
+--------
+texto.txt / ajustes.ini
+escritor_humano_V3.ahk
+puente-navegador.ps1
+dist\  (exe + zip)
+build.ps1
+README.md
