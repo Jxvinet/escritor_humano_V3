@@ -341,7 +341,7 @@ Por defecto
 Restablece el texto corto de ejemplo en español.
 
 escritor_humano_V3.lnk / escritor_humano_V3.exe
-Acceso directo con el icono de la J, o el ejecutable de la carpeta dist. No hace falta el .bat.
+Acceso directo con el icono de la J, o el .exe de dist\escritor_humano_V3\.
 
 Cerrar la ventana no cierra el programa: sigue en la bandeja del reloj. Clic en el icono la muestra otra vez. Para salir del todo, clic derecho y Salir.
 

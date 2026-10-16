@@ -1,5 +1,5 @@
-# Compila el .exe y deja la carpeta lista en dist\
-# Necesitas AutoHotkey v2. Si no tienes Ahk2Exe, lo descarga solo.
+# Compila el .exe y deja UNA carpeta lista en dist\escritor_humano_V3\
+# Necesitas AutoHotkey v2. Si falta Ahk2Exe, lo descarga.
 
 $ErrorActionPreference = "Stop"
 $Root = Split-Path -Parent $MyInvocation.MyCommand.Path
@@ -25,37 +25,27 @@ if (-not (Test-Path $Ahk2Exe)) {
 
 $Dist = Join-Path $Root "dist"
 $Pack = Join-Path $Dist "escritor_humano_V3"
-New-Item -ItemType Directory -Force -Path $Dist | Out-Null
+if (Test-Path $Dist) { Remove-Item $Dist -Recurse -Force }
 New-Item -ItemType Directory -Force -Path $Pack | Out-Null
 
 $In = Join-Path $Root "escritor_humano_V3.ahk"
-$Out = Join-Path $Dist "escritor_humano_V3.exe"
+$Out = Join-Path $Pack "escritor_humano_V3.exe"
 $Ico = Join-Path $Root "icono-j.ico"
 
 & $Ahk2Exe /in $In /out $Out /base $Ahk /icon $Ico /compress 0
 if (-not (Test-Path $Out)) { throw "No se pudo compilar." }
 
+# Solo lo que el .exe necesita al lado (sin duplicar el README ni el codigo fuente)
 $Copy = @(
     "puente-navegador.ps1",
     "fijar-icono-aviso.ps1",
     "icono-j.ico",
-    "icono.ico",
-    "icono.png",
     "ayuda.png",
     "texto.txt",
-    "ajustes.ini",
-    "INSTRUCCIONES.txt",
-    "README.md"
+    "ajustes.ini"
 )
-Copy-Item $Out (Join-Path $Pack "escritor_humano_V3.exe") -Force
 foreach ($f in $Copy) {
-    $src = Join-Path $Root $f
-    if (Test-Path $src) { Copy-Item $src (Join-Path $Pack $f) -Force }
+    Copy-Item (Join-Path $Root $f) (Join-Path $Pack $f) -Force
 }
 
-$ZipOut = Join-Path $Dist "escritor_humano_V3-windows.zip"
-if (Test-Path $ZipOut) { Remove-Item $ZipOut -Force }
-Compress-Archive -Path $Pack -DestinationPath $ZipOut -Force
-
-Write-Host "Listo: $Out"
-Write-Host "Zip: $ZipOut"
+Write-Host "Listo: $Pack"
