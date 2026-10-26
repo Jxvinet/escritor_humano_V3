@@ -48,9 +48,6 @@ global posDestino := 0
 global textoCargado := ""
 global hPipeChrome := 0
 global uiaActivo := false
-global modoUia := false
-global modoFijo := false
-global forzarHwnd := 0
 global costeEnvio := 0
 global sincronizando := false
 
@@ -148,11 +145,6 @@ Iniciar() {
     }
 
     ChromeLanzar()
-    if (A_Args.Length >= 1 && A_Args[1] = "probar") {
-        try FileDelete(A_Temp "\eh-probar-ya.txt")
-        try FileDelete(A_Temp "\eh-probar-hecho.txt")
-        SetTimer(EsperarOrdenDePrueba, -200)
-    }
 
     pos := LeerPosicionVentana()
     if (pos.x != "" && pos.y != "")
@@ -165,25 +157,6 @@ Iniciar() {
     QuitarSeleccion(edTexto)
     ActualizarContador()
     ActualizarEstadoListo()
-}
-
-EsperarOrdenDePrueba() {
-    global forzarHwnd
-    destino := A_Temp "\eh-probar-ya.txt"
-    hecho := A_Temp "\eh-probar-hecho.txt"
-    forzarHwnd := 0
-    loop 400 {
-        if FileExist(destino) {
-            txt := Trim(FileRead(destino, "UTF-8"))
-            if IsInteger(txt)
-                forzarHwnd := Integer(txt)
-            break
-        }
-        Sleep(50)
-    }
-    try FileDelete(destino)
-    EmpezarAEscribir()
-    try FileAppend("ok", hecho, "UTF-8")
 }
 
 PrepararAviso() {
@@ -298,56 +271,52 @@ TextoDeAyuda() {
 escritor_humano_V3 escribe letra a letra, como una persona. No pega y no usa el portapapeles.
 
 CÓMO USARLO
-1. Al abrir, el cuadro grande trae un texto por defecto en español. Cámbialo si quieres y pulsa Guardar.
-   También puedes editar texto.txt (en la carpeta escritor_humano_V3) y pulsar Recargar archivo.
+1. Cada vez que arrancas el programa, el cuadro grande y texto.txt vuelven al texto de ejemplo. Cámbialo si quieres y pulsa Guardar (o Ctrl+S). F8 escribe lo que haya guardado en texto.txt, no lo que esté sin guardar en el cuadro.
 2. Haz clic donde quieras que aparezca el texto.
 3. Pulsa F8.
-4. Solo Escape lo para. Si haces clic en otra ventana, en otro cuadro, en el escritorio o en un navegador (Chrome u otro), sigue escribiendo en el recuadro donde empezó.
+4. Escape para la escritura. Si cierras la ventana, el programa sigue en la bandeja; un clic en el icono la muestra otra vez, y Salir lo cierra del todo. Si haces clic en otra ventana, en otro cuadro, en el escritorio o en un navegador, sigue en el recuadro donde empezó.
 
 QUÉ ES CADA COSA
 
-escritor_humano_V3\texto.txt
-El archivo del que sale el texto al pulsar F8. Va junto al programa. Cada vez que abres la ventana, el cuadro grande arranca con el texto por defecto en español; Guardar lo deja fijo en el archivo.
+texto.txt
+Va junto al programa. Es el texto que se escribe al pulsar F8. Al arrancar se vuelve a dejar el ejemplo; Guardar lo actualiza hasta que cierres el programa del todo.
 
 ms entre letras
-Pausa entre una letra y la siguiente, en milisegundos. Más alto = más lento. Puedes escribir el número o mover la barra (0 a 500).
+Pausa entre una letra y la siguiente, en milisegundos. Más alto = más lento. Número o barra (0 a 500). Se guarda en ajustes.ini.
 
 ms de variación aleatoria
 Cada letra espera un poco más o un poco menos, al azar. Con 120 de base y 80 de variación, cada letra cae entre 40 y 200 ms. Número o barra (0 a 500).
 
 Pausas humanas
-Añade tiempo después de un punto, una coma o un espacio, para que el ritmo no sea uniforme.
+Añade tiempo después de un punto, una coma o un espacio.
 
 Tropiezos
-De vez en cuando escribe una tecla de más o de al lado, borra con calma y deja otra vez la letra correcta. El texto final es el del archivo.
+De vez en cuando escribe una tecla de más o de al lado, borra y deja otra vez la letra correcta. El texto final es el del archivo.
 
 Pausas de duda
-Al empezar, y a veces antes de una palabra, se detiene un poco más, como si pensara.
+Al empezar, y a veces antes de una palabra, se detiene un poco más.
 
 Un tropiezo cada tantas letras (random)
-No es exacto. Si pones 100, el tropiezo puede caer pronto o al final de ese tramo. Un número más alto hace que tropiece menos. Número o barra (8 a 500). En un texto corto puede no haber ninguno.
+No es exacto. Si pones 100, el tropiezo puede caer pronto o al final de ese tramo. Un número más alto tropieza menos. Número o barra (8 a 500). En un texto corto puede no haber ninguno.
 
 Campo de prueba. F8.
-Haz clic en ese cuadro y pulsa F8 para probar el ritmo. Si el cursor está en otro programa, F8 escribe allí.
+Haz clic en ese cuadro y pulsa F8 para ver el ritmo. Si el cursor está en otro programa, F8 escribe allí.
 
 Guardar / Ctrl+S
-Guarda el cuadro grande y los números (también en ajustes.ini).
+Guarda el cuadro grande en texto.txt y los números y casillas en ajustes.ini.
 
 Abrir texto.txt
 Abre el archivo con el Bloc de notas.
 
 Recargar
-Vuelve a poner en el cuadro lo que hay guardado en texto.txt.
+Pone en el cuadro lo que hay ahora en texto.txt.
 
 Por defecto
-Restablece el texto corto de ejemplo en español.
+Vuelve a poner el texto de ejemplo en el cuadro. Pulsa Guardar si quieres dejarlo también en texto.txt.
 
-escritor_humano_V3.lnk / escritor_humano_V3.exe
-Acceso directo con el icono de la J, o el .exe de dist\escritor_humano_V3\.
+Cerrar la ventana deja el programa en la bandeja del reloj. Un clic en el icono la muestra otra vez. Para salir del todo: clic derecho, Salir.
 
-Cerrar la ventana no cierra el programa: sigue en la bandeja del reloj. Clic en el icono la muestra otra vez. Para salir del todo, clic derecho y Salir.
-
-Si usas el código fuente (.ahk), la tecla está al principio del archivo, en global TECLA := "F8". Cámbiala, guarda y reinicia el programa.
+Si usas el código fuente (.ahk), la tecla está al principio del archivo, en global TECLA := "F8". Cámbiala, guarda y vuelve a abrir el programa.
     )"
 }
 
@@ -431,7 +400,7 @@ AlPulsar(*) {
 }
 
 EmpezarAEscribir() {
-    global pendiente, escribiendo, cancelar, hwndDestino, ctrlDestino, posDestino, uiaActivo, modoUia, modoFijo, costeEnvio, forzarHwnd
+    global pendiente, escribiendo, cancelar, hwndDestino, ctrlDestino, posDestino, uiaActivo, costeEnvio
     pendiente := false
     if escribiendo
         return
@@ -440,7 +409,7 @@ EmpezarAEscribir() {
     if (k != "")
         KeyWait(k, "T0.5")
 
-    if (!forzarHwnd && WinActive(g.Hwnd) && !edPrueba.Focused) {
+    if (WinActive(g.Hwnd) && !edPrueba.Focused) {
         TrayTip("Haz clic en el campo de prueba, o en el otro programa, y pulsa " DescribirTecla(TECLA) " otra vez.", "escritor_humano_V3", "Mute")
         txtEstado.Value := "El cursor sigue en esta ventana. Elige el destino y pulsa " DescribirTecla(TECLA) "."
         return
@@ -472,20 +441,12 @@ EmpezarAEscribir() {
     }
 
     avisarSinGuardar := (edTexto.Value != textoCargado)
-    if (forzarHwnd) {
-        hwndDestino := forzarHwnd
-        ctrlDestino := forzarHwnd
-        forzarHwnd := 0
-    } else {
-        hwndDestino := WinExist("A")
-        ctrlDestino := ControlGetFocus("A")
-        if !ctrlDestino
-            ctrlDestino := hwndDestino
-    }
+    hwndDestino := WinExist("A")
+    ctrlDestino := ControlGetFocus("A")
+    if !ctrlDestino
+        ctrlDestino := hwndDestino
     posDestino := 0
     RecordarPosicion()
-    modoUia := false
-    modoFijo := false
     uiaActivo := false
     costeEnvio := 0
     if !EsCajaDeTexto(ctrlDestino)
@@ -929,39 +890,12 @@ UiaMismo() {
     return InStr(resp, Chr(34) . "mismo" . Chr(34) . ":true")
 }
 
-UiaFoto() {
-    return RespuestaOk(ChromeRpc(LineaCmd("foto")))
-}
-
-UiaNota(ch) {
-    if (ch = "`b")
-        resp := ChromeRpc(LineaCmd("nota", JsonCampo("bs", "true")))
-    else
-        resp := ChromeRpc(LineaCmd("nota", JsonCampo("t", EscaparJson(ch), true)))
-    return RespuestaOk(resp)
-}
-
-UiaInsertar(ch) {
-    if (ch = "`n" || ch = "`r")
-        ch := "`n"
-    resp := ChromeRpc(LineaCmd("ins", JsonCampo("t", EscaparJson(ch), true)))
-    return RespuestaOk(resp)
-}
-
-UiaBorrar() {
-    return RespuestaOk(ChromeRpc(LineaCmd("ins", JsonCampo("bs", "true"))))
-}
-
 UiaTecla(ch) {
     if (ch = "`b")
         return RespuestaOk(ChromeRpc(LineaCmd("tecla", JsonCampo("bs", "true"))))
     if (ch = "`n" || ch = "`r")
         ch := "`n"
     return RespuestaOk(ChromeRpc(LineaCmd("tecla", JsonCampo("t", EscaparJson(ch), true))))
-}
-
-UiaEnfocar() {
-    return RespuestaOk(ChromeRpc(LineaCmd("enfocar")))
 }
 
 AlSalir(*) {

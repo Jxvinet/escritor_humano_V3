@@ -1,1 +1,1 @@
-﻿Este es el texto por defecto para F8. Cámbialo si quieres, pulsa Guardar, haz clic en el cuadro donde deba escribirse y vuelve a pulsar F8. Escape cancela la escritura en cualquier momento.
+Este es el texto por defecto para F8. Cámbialo si quieres, pulsa Guardar, haz clic en el cuadro donde deba escribirse y vuelve a pulsar F8. Escape cancela la escritura en cualquier momento.
