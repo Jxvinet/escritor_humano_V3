@@ -159,6 +159,7 @@ Iniciar() {
         g.Show("x" pos.x " y" pos.y)
     else
         g.Show()
+    AsegurarVentanaVisible()
     ModoOscuro(g.Hwnd)
     PonerIcono(g.Hwnd)
     QuitarSeleccion(edTexto)
@@ -255,6 +256,7 @@ ConfigurarBandeja() {
 
 MostrarVentana(*) {
     g.Show()
+    AsegurarVentanaVisible()
     try WinActivate("ahk_id " g.Hwnd)
 }
 
@@ -1368,6 +1370,22 @@ GuardarAjustes(ms, vari, pausas, errores, cada, dudas) {
     f.Close()
 }
 
+PosicionEnPantalla(x, y) {
+    if !IsInteger(x) || !IsInteger(y)
+        return false
+    x := Integer(x)
+    y := Integer(y)
+    ; Windows usa ~-32000 cuando la ventana está oculta o minimizada.
+    if (x < -10000 || y < -10000 || x > 30000 || y > 30000)
+        return false
+    loop MonitorGetCount() {
+        MonitorGetWorkArea(A_Index, &izq, &arr, &der, &aba)
+        if (x >= izq - 40 && x < der - 40 && y >= arr - 40 && y < aba - 40)
+            return true
+    }
+    return false
+}
+
 LeerPosicionVentana() {
     out := {x: "", y: ""}
     ruta := CARPETA "\ventana.ini"
@@ -1376,7 +1394,7 @@ LeerPosicionVentana() {
             return out
         x := IniRead(ruta, "ventana", "x", "")
         y := IniRead(ruta, "ventana", "y", "")
-        if (x != "" && y != "" && IsInteger(x) && IsInteger(y)) {
+        if (x != "" && y != "" && PosicionEnPantalla(x, y)) {
             out.x := Integer(x)
             out.y := Integer(y)
         }
@@ -1390,11 +1408,38 @@ GuardarPosicionVentana() {
     if !IsObject(g)
         return
     try {
+        if !DllCall("IsWindowVisible", "Ptr", g.Hwnd)
+            return
+        if DllCall("IsIconic", "Ptr", g.Hwnd)
+            return
         g.GetPos(&x, &y)
+        if !PosicionEnPantalla(x, y)
+            return
         ruta := CARPETA "\ventana.ini"
         IniWrite(x, ruta, "ventana", "x")
         IniWrite(y, ruta, "ventana", "y")
     } catch {
+    }
+}
+
+AsegurarVentanaVisible() {
+    global g
+    if !IsObject(g)
+        return
+    try {
+        g.GetPos(&x, &y, &w, &h)
+        if PosicionEnPantalla(x, y)
+            return
+        g.Show()
+        g.GetPos(&x, &y, &w, &h)
+        if PosicionEnPantalla(x, y)
+            return
+        MonitorGetWorkArea(MonitorGetPrimary(), &izq, &arr, &der, &aba)
+        nx := izq + Max(0, (der - izq - w) // 2)
+        ny := arr + Max(0, (aba - arr - h) // 2)
+        g.Show("x" nx " y" ny)
+    } catch {
+        try g.Show()
     }
 }
 
