@@ -8,19 +8,14 @@ Si haces clic en otra ventana mientras escribe, sigue en el cuadro donde empezó
 
 ## Cómo usarlo
 
-### Con el .exe (lo más fácil)
+No hace falta instalar nada.
 
 1. Entra en `dist/escritor_humano_V3/`
 2. Abre `escritor_humano_V3.exe`
 3. Cambia el texto si quieres y dale a Guardar
 4. Haz clic donde quieras que escriba y pulsa F8
 
-### Con el código (.ahk)
-
-Hace falta tener [AutoHotkey v2](https://www.autohotkey.com/) instalado.
-
-- Doble clic en `iniciar.bat`, o
-- Doble clic en `escritor_humano_V3.ahk`
+Esa carpeta es el programa completo: el `.exe` y lo que necesita al lado. Cópiala donde quieras y listo.
 
 ## Opciones
 
@@ -36,12 +31,12 @@ Se guardan en `ajustes.ini` y `texto.txt`.
 
 | Archivo | Para qué |
 |---|---|
-| `escritor_humano_V3.ahk` | código |
+| `dist/escritor_humano_V3/` | programa listo para usar |
+| `escritor_humano_V3.ahk` | código fuente |
 | `puente-navegador.ps1` | ayuda para el navegador |
 | `texto.txt` / `ajustes.ini` | texto y velocidad |
-| `dist/escritor_humano_V3/` | carpeta del .exe (para usar sin instalar AutoHotkey) |
-| `build.ps1` | vuelve a generar esa carpeta |
+| `build.ps1` | vuelve a generar la carpeta del `.exe` |
 
-## Nota
+## Código fuente
 
-Lo hice para uso local en mi PC. Si lo usas, es bajo tu responsabilidad.
+Solo si quieres tocar el `.ahk` o recompilar hace falta [AutoHotkey v2](https://www.autohotkey.com/). Para usarlo del día a día, con el `.exe` basta.
